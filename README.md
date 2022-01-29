@@ -5,9 +5,9 @@ Unity Heatmap is Unity3D package built with C#. It allows recording of different
 A heatmap (or heat map) is a data visualization technique that shows magnitude of a phenomenon as color in two dimensions (or sometimes in three dimensions ).
 This package offers heatmap that is higly configurable and can deal with big ammounts of data.
 <p align="center">
-    <img src="https://github.com/kDanik/heatmap-unity/blob/fe5591d5f3ac650253bc291598303113aa1c5410/heatmap-screenshot2.png" width=510 height=280/>
+    <img src="https://github.com/kDanik/heatmap-unity/blob/main/heatmap-screenshot2.png" width=510 height=280/>
   &nbsp; &nbsp;
-    <img src="https://github.com/kDanik/heatmap-unity/blob/fe5591d5f3ac650253bc291598303113aa1c5410/heatmap-screenshot1.png" width=400 height=280/>
+    <img src="https://github.com/kDanik/heatmap-unity/blob/main/heatmap-screenshot1.png" width=400 height=280/>
 </p>
 
    

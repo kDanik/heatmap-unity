@@ -176,9 +176,9 @@ public static class HeatmapVisualisation
         particleSystem.SetParticles(particleList.ToArray());
     }
 
-    private static void AddOnePositionToHeatmap(Position position)
+    private static void AddOnePositionToHeatmap(EventPosition eventPosition)
     {
-        Vector3Int pointInGrid = ConvertPositionToGrid(position.pos);
+        Vector3Int pointInGrid = ConvertPositionToGrid(eventPosition.positionVector);
 
         Vector3Int min = new Vector3Int();
         Vector3Int max = new Vector3Int();
@@ -222,7 +222,7 @@ public static class HeatmapVisualisation
                             {
                                 colorAddValue = colorAddValue / Mathf.Sqrt(distance);
                             }
-                            color[x, y, z] = color[x, y, z] + colorAddValue * position.multiplier;
+                            color[x, y, z] = color[x, y, z] + colorAddValue * eventPosition.positionMultiplier;
                         }
                     }
                 }
@@ -233,9 +233,9 @@ public static class HeatmapVisualisation
 
     public static void AddEventToHeatMap(EventData eventData)
     {
-        foreach (Position position in eventData.positions)
+        foreach (EventPosition eventPosition in eventData.positions)
         {
-            AddOnePositionToHeatmap(position);
+            AddOnePositionToHeatmap(eventPosition);
         }
 
     }

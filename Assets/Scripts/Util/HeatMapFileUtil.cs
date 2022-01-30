@@ -101,11 +101,27 @@ public static class HeatMapFileUtil
                         currentLineEvent.name = properties[4];
                         events.Add(nameOfEvent, currentLineEvent);
                     }
+                
 
-                    Position position = new Position();
-                    position.pos = positionVector;
+                    // it is actually mostly slowing reading from file (by far) than helping for other parts of programm
+                    // maybe I can optimise it in the future
+                    /*
+                    foreach (Position position in events[nameOfEvent].positions)
+                    {
+                        //combining some of positions that are too close to each other
 
-                    currentLineEvent.positions.Add(position);
+                        if (Vector3.Distance(currentPosition, position.pos) < 0.1f)
+                        {
+                            position.multiplier++;
+                            isAdded = true;
+                            break;
+                        }
+                    }*/
+
+                    EventPosition eventPosition = new EventPosition();
+                    eventPosition.positionVector = positionVector;
+
+                    currentLineEvent.positions.Add(eventPosition);
                     count++;
                 }
                 else

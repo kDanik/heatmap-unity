@@ -16,6 +16,7 @@ This package offers heatmap that is higly configurable and can deal with big amm
 ##  Task list
 
 - [x] Add basic functionality
-- [ ] Implement interface to allow different options for writing and reading of data
+- [ ] Implement interface to allow different options for writing and reading of data (interface and implementation)
+- [ ] Implement example of writing and reading data to / from file in JSON format
 - [ ] Implement example of writing and reading data to / from DB
 - [ ] Make setup of package easier and write setup guide

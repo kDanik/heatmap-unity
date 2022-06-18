@@ -36,7 +36,7 @@ public class HeatmapController : MonoBehaviour
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        eventReader = new CSVEventReader(settings.pathForReadingData);
+        eventReader = new JSONEventReader(settings.pathForReadingData);
         
         if (eventReader.ReaderIsAvailable())
         {

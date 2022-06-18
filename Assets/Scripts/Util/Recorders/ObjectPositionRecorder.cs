@@ -35,7 +35,7 @@ public class ObjectPositionRecorder : MonoBehaviour
             return;
         }
 
-        eventWriter = new CSVEventWriter(dataPath, createFileIfNonFound);
+        eventWriter = new JSONEvenWriter(dataPath, createFileIfNonFound);
         recordEvents = eventWriter.WriterIsAvailable();
     }
 

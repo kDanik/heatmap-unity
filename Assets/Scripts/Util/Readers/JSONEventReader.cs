@@ -1,14 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class CSVEventReader : IEventReader
+public class JSONEventReader : IEventReader
 {
     private readonly string path;
 
     private readonly bool hasFileToRead;
 
-    public CSVEventReader(string path)
+    public JSONEventReader(string path)
     {
         this.path = path;
         hasFileToRead = Startup();
@@ -28,7 +29,6 @@ public class CSVEventReader : IEventReader
     {
         var events = new Dictionary<string, EventData>();
 
-
         using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         using (BufferedStream bs = new BufferedStream(fs))
         using (StreamReader sr = new StreamReader(bs))
@@ -36,11 +36,11 @@ public class CSVEventReader : IEventReader
             string line;
             while ((line = sr.ReadLine()) != null)
             {
-                string[] properties = line.Split(';');
+                BaseEvent baseEvent = JsonUtility.FromJson<BaseEvent>(line);
 
-                if (properties.Length > 3)
+                if (baseEvent.eventName != null)
                 {
-                    AddPropertiesDataToEventData(properties, events);
+                    AddBaseEventToEventData(baseEvent, events);
                 }
                 else
                 {
@@ -53,21 +53,20 @@ public class CSVEventReader : IEventReader
     }
 
 
-    private void AddPropertiesDataToEventData(string[] properties, Dictionary<string, EventData> events)
+    private void AddBaseEventToEventData(BaseEvent baseEvent, Dictionary<string, EventData> events)
     {
-        Vector3 positionVector = new Vector3(float.Parse(properties[1]), float.Parse(properties[2]), float.Parse(properties[3]));
-        string nameOfEvent = properties[0];
+        EventData currentLineEvent;
 
         // if event of current event name is not in the EventData list than the new one EventData should be created
-        if (!events.TryGetValue(nameOfEvent, out EventData currentLineEvent))
+        if (!events.TryGetValue(baseEvent.eventName, out currentLineEvent))
         {
             currentLineEvent = new EventData();
-            currentLineEvent.name = nameOfEvent;
-            events.Add(nameOfEvent, currentLineEvent);
+            currentLineEvent.name = baseEvent.eventName;
+            events.Add(baseEvent.eventName, currentLineEvent);
         }
 
         EventPosition eventPosition = new EventPosition();
-        eventPosition.positionVector = positionVector;
+        eventPosition.positionVector = baseEvent.position;
 
         currentLineEvent.positions.Add(eventPosition);
     }

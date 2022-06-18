@@ -1,10 +1,7 @@
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine;
 
 
 public class HeatmapController : MonoBehaviour
@@ -29,6 +26,7 @@ public class HeatmapController : MonoBehaviour
 
     public List<EventData> events = new List<EventData>();
 
+    private IEventReader eventReader;
 
     private bool eventsAreLoaded = false;
     private bool particleSystemInitialized = false;
@@ -38,12 +36,23 @@ public class HeatmapController : MonoBehaviour
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        events = HeatMapFileUtil.ReadVectorsFromFile(settings.pathForReadingData);
-        eventsAreLoaded = true;
+        eventReader = new CSVEventReader(settings.pathForReadingData);
+        
+        if (eventReader.ReaderIsAvailable())
+        {
+            events = eventReader.ReadEvents();
+            eventsAreLoaded = true;
+        } 
+        else
+        {
+            eventsAreLoaded = false;
+            UnityEngine.Debug.Log("Error while trying to read events. Event reader is not available");
+        }   
 
         stopwatch.Stop();
         UnityEngine.Debug.Log("LoadEvents - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
+
     public void InitializeParticleSystem()
     {
         Stopwatch stopwatch = new Stopwatch();
@@ -99,7 +108,7 @@ public class HeatmapController : MonoBehaviour
 
     public bool IsLoadEventsActive()
     {
-        return !String.IsNullOrEmpty(settings.pathForReadingData);
+        return !string.IsNullOrEmpty(settings.pathForReadingData);
     }
 
     public bool IsInitializeParticleSystemActive()

@@ -1,6 +1,6 @@
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 
 
@@ -20,17 +20,17 @@ public class HeatmapGUI : Editor
         {
             if (Application.isPlaying)
             {
-                controller.LoadEvents(); 
+                controller.LoadEvents();
             }
         }
-       
+
 
         GUI.enabled = controller.IsInitializeParticleSystemActive();
         if (GUILayout.Button(new GUIContent("Initialize particle system", "Initializes particle system and prepares particle array")))
         {
             if (Application.isPlaying)
             {
-                controller.InitializeParticleSystem(); 
+                controller.InitializeParticleSystem();
             }
         }
 
@@ -39,7 +39,7 @@ public class HeatmapGUI : Editor
         {
             if (Application.isPlaying)
             {
-                controller.AddSelectedEventsToHeatmap(); 
+                controller.AddSelectedEventsToHeatmap();
             }
         }
 

@@ -19,5 +19,6 @@ This package offers heatmap that is higly configurable and can deal with big amm
 - [x] Implement interface to allow different options for writing and reading of data (interface and implementation)
 - [x] Implement example of writing and reading data to / from file in CSV format
 - [x] Implement example of writing and reading data to / from file in JSON format
+- [ ] Refactor/Rename/Simplify BaseEvent, EventData and EventPosition classes
 - [ ] Implement example of writing and reading data to / from DB
 - [ ] Make setup of package easier and write setup guide

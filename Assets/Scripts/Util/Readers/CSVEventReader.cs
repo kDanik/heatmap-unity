@@ -16,7 +16,14 @@ public class CSVEventReader : IEventReader
 
     public bool Startup()
     {
-        return File.Exists(path);
+        if (File.Exists(path))
+        {
+            return true;
+        }
+        else {
+            Debug.LogError("Invalid path, no file found: " + path);
+            return false;
+        }
     }
 
     bool IEventReader.ReaderIsAvailable()

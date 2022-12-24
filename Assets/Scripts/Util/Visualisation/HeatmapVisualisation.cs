@@ -65,7 +65,7 @@ public static class HeatmapVisualisation
 
     public static void InitParticleArray()
     {
-        //finding size of collider in particles
+        // finding size of collider in particles
         size = Vector3Int.FloorToInt((parentCollider.bounds.max - parentCollider.bounds.min) / settings.particleDistance);
 
         if (settings.heightInParticles != 0)

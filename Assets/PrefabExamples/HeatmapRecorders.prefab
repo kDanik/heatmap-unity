@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.325118, y: -13.02969, z: 13.442745}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraToRecord: {fileID: 0}
-  dataPath: C:\Users\Daniil\My project\Assets\Heatmap\Assets\Test-data\json-test123.txt
+  dataPath: YOUR_PATH.\......\Assets\Test-data\json-test123.txt
   eventName: Camera Look At
   createFileIfNonFound: 1
   recordInterval: 0.1
@@ -63,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToRecord: {fileID: 0}
-  dataPath: C:\Users\Daniil\My project\Assets\Heatmap\Assets\Test-data\json-test123.txt
+  dataPath: YOUR_PATH.\......\Assets\Test-data\json-test123.txt
   eventName: Object Position
   createFileIfNonFound: 1
   recordInterval: 0.1

@@ -80,13 +80,3 @@ If you want to override it this setting can be used (also should be used, when "
 If this setting is on, y axis of events data will be ignored while calculating heatmap. That will result into flat(2D heatmap).
 
 If this setting is off, generated heatmap will be 3D.
-
-##  Task list
-
-- [x] Add basic functionality
-- [x] Implement interface to allow different options for writing and reading of data (interface and implementation)
-- [x] Implement example of writing and reading data to / from file in CSV format
-- [x] Implement example of writing and reading data to / from file in JSON format
-- [ ] Refactor/Rename/Simplify BaseEvent, EventData and EventPosition classes
-- [ ] Implement example of writing and reading data to / from DB
-- [ ] Make setup of package easier and write setup guide

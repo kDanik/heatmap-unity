@@ -17,6 +17,9 @@ public class HeatmapGUI : Editor
 
         AddMethodButtons();
 
+        // set enabled to true to prevent buttons enabled settings to affect other elements below them
+        GUI.enabled = true;
+
         AddEventsSelect();
 
         AddNormalSettings();
@@ -36,9 +39,6 @@ public class HeatmapGUI : Editor
         AddGenerateHeatmapButton();
         AddUpdateHeatmapButton();
         AddResetHeatmapButton();
-
-        // set enabled to true to prevent buttons enabled settings to affect other elements below them
-        GUI.enabled = true;
     }
 
     private void AddLoadEventsButton()

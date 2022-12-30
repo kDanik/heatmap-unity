@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 
-// EventData is collection of tracked positions with specific tag.
-
+/// <summary>
+/// Container for event data (name, positions and status in heatmap), used for heatmap visualization
+/// </summary>
 public class EventData
 {
-    public List<EventPosition> positions = new List<EventPosition>();
+    public List<MergedEventPosition> Positions = new();
 
-    public string name;
-    public bool active = false;
+    public string EventName;
+    public bool IsCurrentlyDisplayedOnHeatmap = false;
 }
 

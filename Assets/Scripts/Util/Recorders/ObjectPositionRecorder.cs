@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class ObjectPositionRecorder : MonoBehaviour
+/// <summary>
+/// Example of event recorder, that tracks and saves object position in specified interval.
+/// </summary>
+public class ObjectPositionRecorder : AbstractEventIntervalRecorder
 {
     [SerializeField]
     private GameObject objectToRecord = null;
@@ -10,57 +13,30 @@ public class ObjectPositionRecorder : MonoBehaviour
     private string eventName;
     [SerializeField]
     private bool createFileIfNonFound;
-    [SerializeField]
-    private float recordInterval = 0.5F;
-    [SerializeField]
-    private bool recordEvents = true;
 
     private IEventWriter eventWriter;
 
-    private float timer = 0F;
-
-
-
-    void Start()
+    void Awake()
     {
-        if (recordEvents == false)
-        {
-            return;
-        }
-
+        if (!record) return;
 
         if (!IsObjectOnScene())
         {
-            recordEvents = false;
+            record = false;
             return;
         }
 
         eventWriter = new JSONEvenWriter(dataPath, createFileIfNonFound);
-        recordEvents = eventWriter.WriterIsAvailable();
+        record = eventWriter.IsWriterAvailable();
+
+        if (record) StartCoroutine(RecordEventInInterval());
     }
 
-    void Update()
-    {
-        if (recordEvents)
-        {
-            if (timer > recordInterval)
-            {
-                RecordGameobjectPosition();
-
-                timer = 0F;
-            }
-            else
-            {
-                timer += Time.deltaTime;
-            }
-        }
-    }
-
-    private void RecordGameobjectPosition()
+    protected override void RecordAndSaveEvent()
     {
         BaseEvent baseEvent = PrepareData();
 
-        eventWriter.SaveEventInstance(baseEvent);
+        eventWriter.SaveEvent(baseEvent);
     }
 
 

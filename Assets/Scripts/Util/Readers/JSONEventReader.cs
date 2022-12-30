@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -15,19 +14,6 @@ public class JSONEventReader : IEventReader
         hasFileToRead = Startup();
     }
 
-    public bool Startup()
-    {
-        if (File.Exists(path))
-        {
-            return true;
-        }
-        else
-        {
-            Debug.LogError("Invalid path, no file found: " + path);
-            return false;
-        }
-    }
-
     bool IEventReader.ReaderIsAvailable()
     {
         return hasFileToRead;
@@ -35,18 +21,18 @@ public class JSONEventReader : IEventReader
 
     List<EventData> IEventReader.ReadEvents()
     {
-        var events = new Dictionary<string, EventData>();
+        Dictionary<string, EventData> events = new();
 
         using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-        using (BufferedStream bs = new BufferedStream(fs))
-        using (StreamReader sr = new StreamReader(bs))
+        using (BufferedStream bs = new(fs))
+        using (StreamReader sr = new(bs))
         {
             string line;
             while ((line = sr.ReadLine()) != null)
             {
                 BaseEvent baseEvent = JsonUtility.FromJson<BaseEvent>(line);
 
-                if (baseEvent.eventName != null)
+                if (baseEvent.EventName != null)
                 {
                     AddBaseEventToEventData(baseEvent, events);
                 }
@@ -60,22 +46,34 @@ public class JSONEventReader : IEventReader
         return new List<EventData>(events.Values);
     }
 
-
     private void AddBaseEventToEventData(BaseEvent baseEvent, Dictionary<string, EventData> events)
     {
         EventData currentLineEvent;
 
-        // if event of current event name is not in the EventData list than the new one EventData should be created
-        if (!events.TryGetValue(baseEvent.eventName, out currentLineEvent))
+        // if event name is not in the EventData list, new EventData should be created
+        if (!events.TryGetValue(baseEvent.EventName, out currentLineEvent))
         {
-            currentLineEvent = new EventData();
-            currentLineEvent.name = baseEvent.eventName;
-            events.Add(baseEvent.eventName, currentLineEvent);
+            currentLineEvent = new();
+            currentLineEvent.EventName = baseEvent.EventName;
+            events.Add(baseEvent.EventName, currentLineEvent);
         }
 
-        EventPosition eventPosition = new EventPosition();
-        eventPosition.positionVector = baseEvent.position;
+        MergedEventPosition eventPosition = new();
+        eventPosition.Position = baseEvent.Position;
 
-        currentLineEvent.positions.Add(eventPosition);
+        currentLineEvent.Positions.Add(eventPosition);
+    }
+
+    private bool Startup()
+    {
+        if (File.Exists(path))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.LogError("Invalid path, no file found: " + path);
+            return false;
+        }
     }
 }

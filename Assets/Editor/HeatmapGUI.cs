@@ -111,7 +111,7 @@ public class HeatmapGUI : Editor
         {
             foreach (EventData eventData in heatmapController.events)
             {
-                eventData.active = EditorGUILayout.Toggle(eventData.name, eventData.active);
+                eventData.IsCurrentlyDisplayedOnHeatmap = EditorGUILayout.Toggle(eventData.EventName, eventData.IsCurrentlyDisplayedOnHeatmap);
             }
         }
     }

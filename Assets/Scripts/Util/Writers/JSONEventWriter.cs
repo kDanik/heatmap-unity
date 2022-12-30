@@ -1,14 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class JSONEvenWriter : IEventWriter
 {
-    // If true, if file wasn't found for given path creates new one
     private readonly bool createFileIfNonFound;
-
-    // path to existing file or path where new file should be created
     private readonly string path;
 
     private readonly bool hasFileToWrite;
@@ -16,31 +12,17 @@ public class JSONEvenWriter : IEventWriter
     public JSONEvenWriter(string path, bool createFileIfNonFound)
     {
         this.path = path;
+
         this.createFileIfNonFound = createFileIfNonFound;
         hasFileToWrite = Startup();
     }
 
-
-    // tries to find or create file, on success returns true, otherwise false
-    public bool Startup()
-    {
-        if (File.Exists(path)) return true;
-
-        if (!createFileIfNonFound) return false;
-
-        return CreateFile(path);
-    }
-
-    bool IEventWriter.WriterIsAvailable()
+    bool IEventWriter.IsWriterAvailable()
     {
         return hasFileToWrite;
     }
 
-
-    /* 
-        Saves one event to file as json. Returns true if successfully saved
-    */
-    bool IEventWriter.SaveEventInstance(BaseEvent baseEvent)
+    bool IEventWriter.SaveEvent(BaseEvent baseEvent)
     {
         if (!hasFileToWrite || !File.Exists(path))
         {
@@ -67,11 +49,7 @@ public class JSONEvenWriter : IEventWriter
         }
     }
 
-
-    /* 
-        Saves list eventsas json  Returns true every event is successfully saved
-    */
-    bool IEventWriter.SaveEventInstances(List<BaseEvent> baseEvents)
+    bool IEventWriter.SaveEvents(List<BaseEvent> baseEvents)
     {
         if (!hasFileToWrite || !File.Exists(path))
         {
@@ -101,10 +79,6 @@ public class JSONEvenWriter : IEventWriter
         }
     }
 
-
-
-
-
     private bool CreateFile(string path)
     {
         if (!createFileIfNonFound) return false;
@@ -126,5 +100,14 @@ public class JSONEvenWriter : IEventWriter
     private string ComposeJsonString(BaseEvent baseEvent)
     {
         return JsonUtility.ToJson(baseEvent);
+    }
+
+    private bool Startup()
+    {
+        if (File.Exists(path)) return true;
+
+        if (!createFileIfNonFound) return false;
+
+        return CreateFile(path);
     }
 }

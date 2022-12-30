@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6283534411946638570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.325118, y: -13.02969, z: 13.442745}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,12 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3135f00e6351d24684d6bd483cf76fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interval: 0.5
+  record: 1
   cameraToRecord: {fileID: 0}
   dataPath: YOUR_PATH.\......\Assets\Test-data\json-test123.txt
   eventName: Camera Look At
   createFileIfNonFound: 1
-  recordInterval: 0.1
-  recordEvents: 1
 --- !u!114 &6283534411946638571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,9 +63,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af210dc2a46f14b4480719ec3e7f57bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interval: 0.5
+  record: 1
   objectToRecord: {fileID: 0}
   dataPath: YOUR_PATH.\......\Assets\Test-data\json-test123.txt
   eventName: Object Position
   createFileIfNonFound: 1
-  recordInterval: 0.1
-  recordEvents: 1

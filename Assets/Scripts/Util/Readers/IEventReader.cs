@@ -2,13 +2,14 @@ using System.Collections.Generic;
 
 interface IEventReader
 {
-    /* 
-        reads data and returns dictionary of EventData objects
-    */
+    /// <summary>
+    /// Reads event data and returns it as list of EventData objects
+    /// </summary>
     public List<EventData> ReadEvents();
 
-    /* 
-         Returns true if reader is ready to use and valid 
-    */
+    /// <summary>
+    /// Checks and returns availability status of reader
+    /// </summary>
+    /// <returns>true if reader is available for reading (valid, initialized and etc), otherwise false</returns>
     public bool ReaderIsAvailable();
 }

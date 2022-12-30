@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class CameraLookAtPositionRecorder : MonoBehaviour
+/// <summary>
+/// Example of event recorder, that tracks and saves camera look at position (Raycast) in specified interval.
+/// </summary>
+public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
 {
     [SerializeField]
     private Camera cameraToRecord = null;
@@ -10,61 +13,36 @@ public class CameraLookAtPositionRecorder : MonoBehaviour
     private string eventName;
     [SerializeField]
     private bool createFileIfNonFound;
-    [SerializeField]
-    private float recordInterval = 0.5F;
-    [SerializeField]
-    private bool recordEvents = true;
 
     private IEventWriter eventWriter;
 
-    private float timer = 0F;
-    private Vector3 centerOfScreen = new Vector3(0.5F, 0.5F, 0.5F);
+    private readonly Vector3 centerOfScreen = new(0.5F, 0.5F, 0.5F);
 
 
-    void Start()
+    void Awake()
     {
-        if (recordEvents == false)
-        {
-            return;
-        }
-
+        if (!record) return;
 
         if (!IsCameraOnTheScene())
         {
-            recordEvents = false;
+            record = false;
             return;
         }
 
         eventWriter = new JSONEvenWriter(dataPath, createFileIfNonFound);
-        recordEvents = eventWriter.WriterIsAvailable();
+        record = eventWriter.IsWriterAvailable();
+
+        if (record) StartCoroutine(RecordEventInInterval());
     }
 
-    void Update()
-    {
-        if (recordEvents)
-        {
-            if (timer > recordInterval)
-            {
-                RecordCameraLookAtPosition();
-
-                timer = 0F;
-            }
-            else
-            {
-                timer += Time.deltaTime;
-            }
-        }
-    }
-
-    private void RecordCameraLookAtPosition()
+    protected override void RecordAndSaveEvent()
     {
         BaseEvent baseEvent = PrepareData();
 
         if (baseEvent == null) return;
 
-        eventWriter.SaveEventInstance(baseEvent);
+        eventWriter.SaveEvent(baseEvent);
     }
-
 
     private BaseEvent PrepareData()
     {

@@ -5,7 +5,6 @@ public static class HeatmapVisualisation
 {
     private static ParticleSystem particleSystem;
 
-    private static GameObject parentObject;
     private static BoxCollider parentCollider;
     private static HeatmapController.Settings settings;
 
@@ -20,7 +19,6 @@ public static class HeatmapVisualisation
         if (parent.GetComponent<ParticleSystem>() == null)
         {
             //Getting references
-            parentObject = parent;
             parentCollider = parent.GetComponent<BoxCollider>();
             settings = parent.GetComponent<HeatmapController>().settings;
 
@@ -51,13 +49,13 @@ public static class HeatmapVisualisation
             }
             else
             {
-                UnityEngine.Debug.Log("particle material is not defined!");
+                Debug.Log("particle material is not defined!");
             }
 
             return particleSystem;
         }
 
-        UnityEngine.Debug.Log("there is particle system on parent object already!");
+        Debug.Log("there is particle system on parent object already!");
 
         return null;
     }
@@ -174,9 +172,9 @@ public static class HeatmapVisualisation
         particleSystem.SetParticles(particleList.ToArray());
     }
 
-    private static void AddOnePositionToHeatmap(EventPosition eventPosition)
+    private static void AddOnePositionToHeatmap(MergedEventPosition eventPosition)
     {
-        Vector3Int pointInGrid = ConvertPositionToGrid(eventPosition.positionVector);
+        Vector3Int pointInGrid = ConvertPositionToGrid(eventPosition.Position);
 
         Vector3Int min = new Vector3Int();
         Vector3Int max = new Vector3Int();
@@ -220,7 +218,7 @@ public static class HeatmapVisualisation
                             {
                                 colorAddValue = colorAddValue / Mathf.Sqrt(distance);
                             }
-                            color[x, y, z] = color[x, y, z] + colorAddValue * eventPosition.positionMultiplier;
+                            color[x, y, z] = color[x, y, z] + colorAddValue * eventPosition.Multiplier;
                         }
                     }
                 }
@@ -231,7 +229,7 @@ public static class HeatmapVisualisation
 
     public static void AddEventToHeatMap(EventData eventData)
     {
-        foreach (EventPosition eventPosition in eventData.positions)
+        foreach (MergedEventPosition eventPosition in eventData.Positions)
         {
             AddOnePositionToHeatmap(eventPosition);
         }

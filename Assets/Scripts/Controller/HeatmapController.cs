@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
-
+using Debug = UnityEngine.Debug;
 
 public class HeatmapController : MonoBehaviour
 {
@@ -22,88 +22,88 @@ public class HeatmapController : MonoBehaviour
 
         public string pathForReadingData;
     }
-    public Settings settings = new Settings();
+    public Settings settings = new();
 
-    public List<EventData> events = new List<EventData>();
+    public List<EventData> events = new();
 
     private IEventReader eventReader;
+    private HeatmapVisualisation heatmapVisualisation;
 
     private bool eventsAreLoaded = false;
-    private bool particleSystemInitialized = false;
+    private bool particleSystemIsInitialized = false;
 
+    private void Awake()
+    {
+        heatmapVisualisation = new HeatmapVisualisation(settings);
+    }
+
+    /// <summary>
+    /// Loads events from file into events property (that also makes them display in heatmap configuration)
+    /// </summary>
     public void LoadEvents()
     {
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Start();
 
         eventReader = new JSONEventReader(settings.pathForReadingData);
-        
+
         if (eventReader.ReaderIsAvailable())
         {
             events = eventReader.ReadEvents();
             eventsAreLoaded = true;
-        } 
+        }
         else
         {
             eventsAreLoaded = false;
-            UnityEngine.Debug.Log("Error while trying to read events. Event reader is not available");
-        }   
+            Debug.Log("Error while trying to read events. Event reader is not available");
+        }
 
         stopwatch.Stop();
-        UnityEngine.Debug.Log("LoadEvents - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
+        Debug.Log("LoadEvents - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
 
+    /// <summary>
+    /// Creates and configures particle system (and particle array)
+    /// </summary>
     public void InitializeParticleSystem()
     {
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        HeatmapVisualisation.InitParticleSystem(this.gameObject);
-        HeatmapVisualisation.InitParticleArray();
-        particleSystemInitialized = true;
+        heatmapVisualisation.InitializeParticleSystem(gameObject);
+        heatmapVisualisation.InitializeParticleArray();
+        particleSystemIsInitialized = true;
 
         stopwatch.Stop();
-        UnityEngine.Debug.Log("InitializeParticleSystem - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
+        Debug.Log("InitializeParticleSystem - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
-
-    public void UpdateParticleSystem()
-    {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
-        HeatmapVisualisation.UpdateParticleSystem();
-
-        stopwatch.Stop();
-        UnityEngine.Debug.Log("UpdateParticleSystem - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
-    }
-
 
     public void ResetHeatmap()
     {
-        HeatmapVisualisation.ResetParticlesColor();
-        HeatmapVisualisation.UpdateParticleSystem();
+        heatmapVisualisation.ResetParticlesColor();
+        heatmapVisualisation.UpdateParticlesInParticleSystem();
     }
 
     public void AddSelectedEventsToHeatmap()
     {
 
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        HeatmapVisualisation.ResetParticlesColor();
+        heatmapVisualisation.ResetParticlesColor();
 
         foreach (EventData eventData in events)
         {
             if (eventData.IsCurrentlyDisplayedOnHeatmap)
             {
-                HeatmapVisualisation.AddEventToHeatMap(eventData);
+                heatmapVisualisation.AddEventToHeatMap(eventData);
             }
         }
 
-        HeatmapVisualisation.UpdateParticleSystem();
+        heatmapVisualisation.UpdateParticlesInParticleSystem();
 
         stopwatch.Stop();
-        UnityEngine.Debug.Log("AddEventsToHeatMap  - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
+        Debug.Log("AddEventsToHeatMap  - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
 
     public bool IsLoadEventsActive()
@@ -119,18 +119,11 @@ public class HeatmapController : MonoBehaviour
 
     public bool IsAddEventToHeatMapActive()
     {
-        return eventsAreLoaded && particleSystemInitialized;
-    }
-
-    public bool IsUpdateParticleSystemActive()
-    {
-        return particleSystemInitialized;
+        return eventsAreLoaded && particleSystemIsInitialized;
     }
 
     public bool IsResetHeatmapActive()
     {
-        return particleSystemInitialized;
+        return particleSystemIsInitialized;
     }
-
 }
-

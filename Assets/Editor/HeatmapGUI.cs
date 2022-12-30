@@ -37,7 +37,6 @@ public class HeatmapGUI : Editor
         AddLoadEventsButton();
         AddInitializeParticleSystemButton();
         AddGenerateHeatmapButton();
-        AddUpdateHeatmapButton();
         AddResetHeatmapButton();
     }
 
@@ -56,7 +55,7 @@ public class HeatmapGUI : Editor
     private void AddResetHeatmapButton()
     {
         GUI.enabled = heatmapController.IsResetHeatmapActive();
-        if (GUILayout.Button(new GUIContent("Reset heatmap", "Resets heatmap to default values")))
+        if (GUILayout.Button(new GUIContent("Reset heatmap values", "Resets heatmap color values to default values")))
         {
             if (Application.isPlaying)
             {
@@ -80,27 +79,13 @@ public class HeatmapGUI : Editor
     private void AddGenerateHeatmapButton()
     {
         GUI.enabled = heatmapController.IsAddEventToHeatMapActive();
-        if (GUILayout.Button(new GUIContent("Generate heatmap", "Calculates color of particles in particle system")))
+        if (GUILayout.Button(new GUIContent("Generate heatmap", "Calculates color of particles in particle system using data from selected events")))
         {
             if (Application.isPlaying)
             {
                 heatmapController.AddSelectedEventsToHeatmap();
             }
         }
-    }
-
-    private void AddUpdateHeatmapButton()
-    {
-
-        GUI.enabled = heatmapController.IsUpdateParticleSystemActive();
-        if (GUILayout.Button(new GUIContent("Update heatmap", "Applies color calculations to heatmap")))
-        {
-            if (Application.isPlaying)
-            {
-                heatmapController.UpdateParticleSystem();
-            }
-        }
-
     }
 
     private void AddEventsSelect()

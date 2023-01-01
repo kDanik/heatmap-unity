@@ -8,6 +8,10 @@ public class EventData
     public List<MergedEventPosition> Positions = new();
 
     public string EventName;
+
+    /// <summary>
+    /// Is this event already used for heatmap color calculations
+    /// </summary>
     public bool IsCurrentlyDisplayedOnHeatmap = false;
 }
 

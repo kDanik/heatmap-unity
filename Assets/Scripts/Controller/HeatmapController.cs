@@ -78,12 +78,18 @@ public class HeatmapController : MonoBehaviour
         Debug.Log("InitializeParticleSystem - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
 
+    /// <summary>
+    /// Resets heatmap color(color values) to default
+    /// </summary>
     public void ResetHeatmap()
     {
         heatmapVisualisation.ResetParticlesColor();
         heatmapVisualisation.UpdateParticlesInParticleSystem();
     }
 
+    /// <summary>
+    /// Adds selected (in Editor window) events to heatmap and updates heatmap with their values
+    /// </summary>
     public void AddSelectedEventsToHeatmap()
     {
 
@@ -106,22 +112,33 @@ public class HeatmapController : MonoBehaviour
         Debug.Log("AddEventsToHeatMap  - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
 
+    /// <summary>
+    /// Status of Load Events action. (see HeatmapGUI.cs for usage))
+    /// </summary>
     public bool IsLoadEventsActive()
     {
         return !string.IsNullOrEmpty(settings.pathForReadingData);
     }
 
+    /// <summary>
+    /// Status of Initialize Particle System action.  (see HeatmapGUI.cs for usage)
+    /// </summary>
     public bool IsInitializeParticleSystemActive()
     {
         return GetComponent<BoxCollider>() != null;
-
     }
 
+    /// <summary>
+    /// Status of Add Events to Heatmap action.  (see HeatmapGUI.cs for usage)
+    /// </summary>
     public bool IsAddEventToHeatMapActive()
     {
         return eventsAreLoaded && particleSystemIsInitialized;
     }
 
+    /// <summary>
+    /// Status of Reset Heatmap action. (see HeatmapGUI.cs for usage)
+    /// </summary>
     public bool IsResetHeatmapActive()
     {
         return particleSystemIsInitialized;

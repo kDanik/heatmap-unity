@@ -7,8 +7,10 @@ using UnityEngine;
 public abstract class AbstractEventIntervalRecorder : MonoBehaviour
 {
     [SerializeField]
+    [Tooltip("Interval for event recording in seconds")]
     private float interval = 0.5F;
     [SerializeField]
+    [Tooltip("Is recording of event activate")]
     protected bool record = true;
 
     /// <summary>

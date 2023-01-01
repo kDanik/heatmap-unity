@@ -17,7 +17,7 @@ public class HeatmapGUI : Editor
 
         AddMethodButtons();
 
-        // set enabled to true to prevent buttons enabled settings to affect other elements below them
+        // set enabled to true to prevent buttons 'enabled' setting to affect other elements below them
         GUI.enabled = true;
 
         AddEventsSelect();
@@ -26,13 +26,13 @@ public class HeatmapGUI : Editor
 
         AddAdvancedSettings();
 
-        // gradient should be update in the end of OnInspectorGUI
+        // gradient changes must be applied in the end of OnInspectorGUI
         serializedGradient.ApplyModifiedProperties();
     }
 
     private void AddMethodButtons()
     {
-        GUILayout.Label("\nMethods", EditorStyles.boldLabel);
+        GUILayout.Label("\nActions", EditorStyles.boldLabel);
 
         AddLoadEventsButton();
         AddInitializeParticleSystemButton();
@@ -43,7 +43,7 @@ public class HeatmapGUI : Editor
     private void AddLoadEventsButton()
     {
         GUI.enabled = heatmapController.IsLoadEventsActive();
-        if (GUILayout.Button(new GUIContent("Load events from file", "")))
+        if (GUILayout.Button(new GUIContent("Load events from file")))
         {
             if (Application.isPlaying)
             {
@@ -91,7 +91,8 @@ public class HeatmapGUI : Editor
     private void AddEventsSelect()
     {
         GUILayout.Label("\nEvents", EditorStyles.boldLabel);
-        GUILayout.Label("Choose events that you want to display with heatmap\n");
+        GUILayout.Label("Choose events, that should be visualized with heatmap\n");
+
         if (heatmapController.events != null)
         {
             foreach (EventData eventData in heatmapController.events)
@@ -105,13 +106,13 @@ public class HeatmapGUI : Editor
     {
         GUILayout.Label("\nSettings", EditorStyles.boldLabel);
 
-        heatmapController.settings.particleDistance = EditorGUILayout.Slider(new GUIContent("Distance between particles", "Distance for any of axes from one particle to other one. Make it less if you want to improve performance"), heatmapController.settings.particleDistance, 0.1F, 5F);
+        heatmapController.settings.particleDistance = EditorGUILayout.Slider(new GUIContent("Distance between particles", "Smaller distance - improved visuals and precision. Bigger distance - improved performance"), heatmapController.settings.particleDistance, 0.1F, 5F);
 
-        heatmapController.settings.particleSize = EditorGUILayout.Slider(new GUIContent("Particle Size", "(Size of particle in units)"), heatmapController.settings.particleSize, 0.01F, 15F);
+        heatmapController.settings.particleSize = EditorGUILayout.Slider(new GUIContent("Particle Size", "(in Unity units)"), heatmapController.settings.particleSize, 0.01F, 15F);
 
-        heatmapController.settings.colorMultiplier = EditorGUILayout.Slider(new GUIContent("Coloring Multiplier", "Defines how much one point will affect colors of particles in heatmap "), heatmapController.settings.colorMultiplier, 0, 1F);
+        heatmapController.settings.colorMultiplier = EditorGUILayout.Slider(new GUIContent("Coloring Multiplier", "Defines how much one position will change color value of particles near it"), heatmapController.settings.colorMultiplier, 0, 1F);
 
-        heatmapController.settings.maxColoringDistance = EditorGUILayout.Slider(new GUIContent("Coloring Distance", "(Max distance between particle and vector3 that effects it)"), heatmapController.settings.maxColoringDistance, 0.01F, 10F);
+        heatmapController.settings.maxColoringDistance = EditorGUILayout.Slider(new GUIContent("Coloring Distance", "Max distance in which event position will affect color of particles"), heatmapController.settings.maxColoringDistance, 0.01F, 15F);
 
         serializedGradient = new SerializedObject(target);
         SerializedProperty colorGradient = serializedGradient.FindProperty("settings.gradient");
@@ -122,21 +123,20 @@ public class HeatmapGUI : Editor
     {
         GUILayout.Label("\nAdvanced Settings", EditorStyles.boldLabel);
 
-        heatmapController.settings.colorCutoff = EditorGUILayout.Slider(new GUIContent("Color Cutoff", "Minimum color value that will be displayed(With 0 value cutout is deactivated)"), heatmapController.settings.colorCutoff, 0F, 1.01F);
+        heatmapController.settings.colorCutoff = EditorGUILayout.Slider(new GUIContent("Color Cutoff", "Hides all particles with smaller color value (With 0 value cutout is deactivated)"), heatmapController.settings.colorCutoff, 0F, 1.01F);
 
-        heatmapController.settings.heightInParticles = EditorGUILayout.IntSlider(new GUIContent("Height in particles", "(With 0 value height is calculated depending on collider height)"), heatmapController.settings.heightInParticles, 0, 50);
+        heatmapController.settings.heightInParticles = EditorGUILayout.IntSlider(new GUIContent("Height of particle system in particles", "(With 0 value height is calculated depending on collider height)"), heatmapController.settings.heightInParticles, 0, 50);
 
         heatmapController.settings.ignoreYforColoring = EditorGUILayout.Toggle(new GUIContent("Ignore height for color calculations", "(If true color will be calculated only depending on X and Z axes)"), heatmapController.settings.ignoreYforColoring);
 
         GUILayout.Label("\nPaths", EditorStyles.boldLabel);
 
-        GUILayout.Label("Path for reading points from file");
+        GUILayout.Label("Path for reading event data from file");
         heatmapController.settings.pathForReadingData = GUILayout.TextField(heatmapController.settings.pathForReadingData);
-
 
         GUILayout.Label("\nMaterial", EditorStyles.boldLabel);
 
-        GUILayout.Label("Use only the one from package(or be creative if you know what you are doing)");
+        GUILayout.Label("Use material, that is used in example prefab for heatmap. \n(or be creative if you know what you are doing)");
 
         heatmapController.settings.particleMaterial = (Material)EditorGUILayout.ObjectField(heatmapController.settings.particleMaterial, typeof(Material), true);
     }

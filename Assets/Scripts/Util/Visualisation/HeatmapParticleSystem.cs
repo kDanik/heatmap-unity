@@ -2,6 +2,9 @@
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
+/// <summary>
+/// Controls interactions with particle system of heatmap
+/// </summary>
 public class HeatmapParticleSystem
 {
     private ParticleSystem particleSystem;

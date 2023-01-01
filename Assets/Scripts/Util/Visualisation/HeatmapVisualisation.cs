@@ -62,7 +62,6 @@ public class HeatmapVisualisation
         }
     }
 
-
     /// <summary>
     /// Resets color value of all particles to default (0f)
     /// </summary>
@@ -79,12 +78,12 @@ public class HeatmapVisualisation
 
     private void AddOnePositionToHeatmap(MergedEventPosition eventPosition)
     {
-        Vector3Int pointInGrid = heatmapParticleSystem.ConvertGlobalPositionToParticleGrid(eventPosition.Position, settings);
+        Vector3Int eventPositionInParticleGrid = heatmapParticleSystem.ConvertGlobalPositionToParticleGrid(eventPosition.Position, settings);
         Vector3Int sizeInParticles = heatmapParticleSystem.GetSizeOfParticleSystemInParticles();
 
         // calculate bounds in which particles can be affected by eventPosition
-        Vector3Int minBound = CalculateMinBound(pointInGrid);
-        Vector3Int maxBound = CalculateMaxBound(pointInGrid);
+        Vector3Int minBound = CalculateMinBound(eventPositionInParticleGrid);
+        Vector3Int maxBound = CalculateMaxBound(eventPositionInParticleGrid);
 
         // checking all particles in this bounds, and updating their color value depending on distance
         for (int x = minBound.x; x <= maxBound.x; x += 1)
@@ -95,31 +94,36 @@ public class HeatmapVisualisation
                 {
                     if (IsInBoundsOfParticleArray(x, y, z, sizeInParticles))
                     {
-                        UpdateColorAddValue(x, y, z, pointInGrid, eventPosition);
+                        UpdateColorAddValue(new Vector3Int(x, y, z), eventPositionInParticleGrid, eventPosition);
                     }
                 }
             }
         }
     }
 
-    private void UpdateColorAddValue(int xGrid, int yGrid, int zGrid, Vector3Int pointInGrid, MergedEventPosition eventPosition)
+    private void UpdateColorAddValue(Vector3Int particlePositionInGrid, Vector3Int eventPositionInParticleGrid, MergedEventPosition eventPosition)
     {
-        float distance = ((pointInGrid.x - xGrid) * (pointInGrid.x - xGrid) + (pointInGrid.z - zGrid) * (pointInGrid.z - zGrid));
+        float distance = CalculateDistanceBetweenTwoParticleGridPoints(particlePositionInGrid, eventPositionInParticleGrid, settings.ignoreYforColoring);
 
-        if (!settings.ignoreYforColoring)
+        if (distance < settings.maxColoringDistance)
         {
-            distance += (pointInGrid.y - yGrid) * (pointInGrid.y - yGrid);
+            // calculate colorAddValue, depending on how close is distance to maxColoringDistance
+            float colorAddValue = settings.colorMultiplier * (1 - distance / settings.maxColoringDistance);
+
+            particleColorValues[particlePositionInGrid.x, particlePositionInGrid.y, particlePositionInGrid.z] += colorAddValue * eventPosition.Multiplier;
         }
-            
-        if (distance <= (settings.maxColoringDistance * settings.maxColoringDistance))
+    }
+
+    private float CalculateDistanceBetweenTwoParticleGridPoints(Vector3Int point1, Vector3Int point2, bool ignoreHeightInCalculation)
+    {
+        float distanceSquare = (point1.x - point2.x) * (point1.x - point2.x) + (point1.z - point2.z) * (point1.z - point2.z);
+
+        if (!ignoreHeightInCalculation)
         {
-            float colorAddValue = settings.colorMultiplier;
-            if (distance > 1)
-            {
-                colorAddValue /= Mathf.Sqrt(distance);
-            }
-            particleColorValues[xGrid, yGrid, zGrid] = particleColorValues[xGrid, yGrid, zGrid] + colorAddValue * eventPosition.Multiplier;
+            distanceSquare += (point1.y - point2.y) * (point1.y - point2.y);
         }
+
+        return Mathf.Sqrt(distanceSquare) * settings.particleDistance;
     }
 
     private bool IsInBoundsOfParticleArray(int x, int y, int z, Vector3Int sizeInParticles)

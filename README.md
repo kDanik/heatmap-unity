@@ -77,3 +77,9 @@ If you want to override it this setting can be used (also should be used, when t
 If this setting is on, the y-axis of events data will be ignored while calculating the heatmap. That will result in a flat(2D heatmap).
 
 If this setting is off, generated heatmap will be 3D.
+
+
+## TODO at some point
+- Add in memory recorder and reader (to record and visualize data without writing to file = live)
+- Maybe debug and test performance to allow even bigger data sets / faster visualization
+- ...... more than just heatmap as visualization option ?

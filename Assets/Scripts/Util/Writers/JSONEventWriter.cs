@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class JSONEvenWriter : IEventWriter
+public class JSONEventWriter : IEventWriter
 {
     private readonly bool createFileIfNonFound;
     private readonly string path;
 
     private readonly bool hasFileToWrite;
 
-    public JSONEvenWriter(string path, bool createFileIfNonFound)
+    public JSONEventWriter(string path, bool createFileIfNonFound)
     {
         this.path = path;
 

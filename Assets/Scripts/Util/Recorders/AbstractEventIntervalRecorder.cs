@@ -16,6 +16,15 @@ public abstract class AbstractEventIntervalRecorder : MonoBehaviour
     /// <summary>
     /// Coroutine that calls RecordAndSaveEvent() in specified interval
     /// </summary>
+    protected IEnumerator StartEventRecording()
+    {
+        // small delay is required, to prevent "Sharing violation" for newly created files
+        yield return new WaitForEndOfFrame();
+
+        StartCoroutine(RecordEventInInterval());
+    }
+
+
     protected IEnumerator RecordEventInInterval()
     {
         if (record)

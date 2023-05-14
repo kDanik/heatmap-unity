@@ -29,10 +29,10 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
             return;
         }
 
-        eventWriter = new JSONEvenWriter(dataPath, createFileIfNonFound);
+        eventWriter = new JSONEventWriter(dataPath, createFileIfNonFound);
         record = eventWriter.IsWriterAvailable();
 
-        if (record) StartCoroutine(RecordEventInInterval());
+        if (record) StartCoroutine(StartEventRecording());
     }
 
     protected override void RecordAndSaveEvent()

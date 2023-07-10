@@ -100,7 +100,7 @@ public class HeatmapController : MonoBehaviour
 
         foreach (EventData eventData in events)
         {
-            if (eventData.IsCurrentlyDisplayedOnHeatmap)
+            if (eventData.ShouldEventBeVisualised)
             {
                 heatmapVisualisation.AddEventToHeatMap(eventData);
             }

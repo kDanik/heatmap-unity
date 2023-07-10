@@ -10,8 +10,8 @@ public class EventData
     public string EventName;
 
     /// <summary>
-    /// Is this event already used for heatmap color calculations
+    /// Should this event be used for heatmap visualisation
     /// </summary>
-    public bool IsCurrentlyDisplayedOnHeatmap = false;
+    public bool ShouldEventBeVisualised = false;
 }
 

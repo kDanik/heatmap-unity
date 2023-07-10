@@ -83,7 +83,7 @@ public class HeatmapVisualisation
 
         // calculate bounds in which particles can be affected by eventPosition
         Vector3Int minBound = CalculateMinBound(eventPositionInParticleGrid);
-        Vector3Int maxBound = CalculateMaxBound(eventPositionInParticleGrid);
+        Vector3Int maxBound = CalculateMaxBound(eventPositionInParticleGrid, sizeInParticles);
 
         // checking all particles in this bounds, and updating their color value depending on distance
         for (int x = minBound.x; x <= maxBound.x; x += 1)
@@ -103,7 +103,7 @@ public class HeatmapVisualisation
 
     private void UpdateColorAddValue(Vector3Int particlePositionInGrid, Vector3Int eventPositionInParticleGrid, MergedEventPosition eventPosition)
     {
-        float distance = CalculateDistanceBetweenTwoParticleGridPoints(particlePositionInGrid, eventPositionInParticleGrid, settings.ignoreYforColoring);
+        float distance = CalculateDistanceBetweenTwoParticleGridPoints(particlePositionInGrid, eventPositionInParticleGrid);
 
         if (distance < settings.maxColoringDistance)
         {
@@ -114,11 +114,11 @@ public class HeatmapVisualisation
         }
     }
 
-    private float CalculateDistanceBetweenTwoParticleGridPoints(Vector3Int point1, Vector3Int point2, bool ignoreHeightInCalculation)
+    private float CalculateDistanceBetweenTwoParticleGridPoints(Vector3Int point1, Vector3Int point2)
     {
         float distanceSquare = (point1.x - point2.x) * (point1.x - point2.x) + (point1.z - point2.z) * (point1.z - point2.z);
 
-        if (!ignoreHeightInCalculation)
+        if (!settings.ignoreYforColoring)
         {
             distanceSquare += (point1.y - point2.y) * (point1.y - point2.y);
         }
@@ -138,32 +138,32 @@ public class HeatmapVisualisation
         min.x = (int)(positionInParticleGrid.x - settings.maxColoringDistance / settings.particleDistance - 1);
         min.z = (int)(positionInParticleGrid.z - settings.maxColoringDistance / settings.particleDistance - 1);
 
-        if (!settings.ignoreYforColoring)
+        if (settings.ignoreYforColoring)
         {
-            min.y = (int)(positionInParticleGrid.y - settings.maxColoringDistance / settings.particleDistance - 1);
+            min.y = 0;
         }
         else
         {
-            min.y = 0;
+            min.y = (int)(positionInParticleGrid.y - settings.maxColoringDistance / settings.particleDistance - 1);
         }
 
         return min;
     }
 
-    private Vector3Int CalculateMaxBound(Vector3Int positionInParticleGrid)
+    private Vector3Int CalculateMaxBound(Vector3Int positionInParticleGrid, Vector3Int sizeInParticles)
     {
         Vector3Int max = new();
 
         max.x = (int)(positionInParticleGrid.x + settings.maxColoringDistance / settings.particleDistance + 1);
         max.z = (int)(positionInParticleGrid.z + settings.maxColoringDistance / settings.particleDistance + 1);
 
-        if (!settings.ignoreYforColoring)
+        if (settings.ignoreYforColoring)
         {
-            max.y = (int)(positionInParticleGrid.y + settings.maxColoringDistance / settings.particleDistance + 1);
+            max.y = sizeInParticles.y - 1;
         }
         else
         {
-            max.y = positionInParticleGrid.y - 1;
+            max.y = (int)(positionInParticleGrid.y + settings.maxColoringDistance / settings.particleDistance + 1);
         }
 
         return max;
